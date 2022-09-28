@@ -1,0 +1,32 @@
+<RCC>
+  <qresource prefix="qode-icons">
+    <file>assets/clear-left.png</file>
+    <file>assets/go-next.png</file>
+    <file>assets/go-previous.png</file>
+    <file>assets/arrow_down_off.png</file>
+    <file>assets/arrow_down_on.png</file>
+    <file>assets/arrow_right_off.png</file>
+    <file>assets/arrow_right_on.png</file>
+    <file>assets/close.png</file>
+    <file>assets/dialog-error.png</file>
+    <file>assets/dialog-info.png</file>
+    <file>assets/dialog-warning.png</file>
+    <file>assets/document-save.png</file>
+    <file>assets/document-save-as.png</file>
+    <file>assets/edit-copy.png</file>
+    <file>assets/edit-cut.png</file>
+    <file>assets/edit-delete.png</file>
+    <file>assets/edit-find.png</file>
+    <file>assets/edit-find-replace.png</file>
+    <file>assets/edit-paste.png</file>
+    <file>assets/edit-redo.png</file>
+    <file>assets/edit-select-all.png</file>
+    <file>assets/edit-undo.png</file>
+    <file>assets/format-indent-less.png</file>
+    <file>assets/format-indent-more.png</file>
+    <file>assets/go-down.png</file>
+    <file>assets/goto-line.png</file>
+    <file>assets/go-up.png</file>
+    <file>assets/edit-trash.png</file>
+  </qresource>
+</RCC>
