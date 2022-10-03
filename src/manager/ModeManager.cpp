@@ -1,6 +1,6 @@
 #include "manager/ModeManager.h"
 
-#include "Mode.h"
+#include "mode/Mode.h"
 
 ModeManager::ModeManager(CodeEdit *editor) : Manager(editor) {}
 
@@ -41,6 +41,7 @@ Mode *ModeManager::remove(const QString &name) {
 void ModeManager::clear() {
   for (auto i = m_modes.begin(); i != m_modes.end(); i++) {
     i.value()->onUninstall();
+    // TODO deleteLater()
     delete i.value();
   }
   m_modes.clear();
@@ -50,6 +51,6 @@ ModeManager::ModeMap::const_iterator ModeManager::cbegin() const {
   return m_modes.cbegin();
 }
 
-ModeManager::ModeMap::const_iterator ModeManager::cbegin() const {
+ModeManager::ModeMap::const_iterator ModeManager::cend() const {
   return m_modes.cend();
 }

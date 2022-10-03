@@ -43,6 +43,7 @@ using TextDecorationRange = variant<
   (useful for errors markers and so on...)
  */
 class TextDecoration: public QObject, public QTextEdit::ExtraSelection {
+  Q_OBJECT
 public:
   /**
     @brief Creates a text decoration.
@@ -74,7 +75,7 @@ public:
         appear on top of the lowest values.
    */
   TextDecoration(
-    const QTextDocument &document,
+    QTextDocument *document,
     const TextDecorationRange &range,
     int drawOrder = 0,
     const QString &tooltip = "",

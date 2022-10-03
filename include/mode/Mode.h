@@ -54,6 +54,8 @@ public:
    */
   virtual void cloneSettings(Mode *original);
 
+protected:
+
   /**
    * @brief Installs the extension on the editor.
    * 
@@ -79,6 +81,10 @@ public:
    * true and disconnect when it is false).
    */
   virtual void onStateChanged(bool enabled);
+
+private:
+  friend class ModeManager;
+  friend class PanelManager;
 
 private:
   QString m_name;

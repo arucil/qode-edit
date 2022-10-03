@@ -1,14 +1,16 @@
 #include "TextDecoration.h"
 
+#include <QTextBlock>
+
 TextDecoration::TextDecoration(
   const QTextCursor &cursor,
   const TextDecorationRange &range,
   int drawOrder,
   const QString &tooltip,
   bool fullWidth) :
-  QTextEdit::ExtraSelection {cursor},
-  m_drawOrder(drawOrder),
-  m_tooltip(tooltip) {
+  QTextEdit::ExtraSelection {cursor, QTextCharFormat()},
+  m_tooltip(tooltip),
+  m_drawOrder(drawOrder) {
   init(range, fullWidth);
 }
 
@@ -18,21 +20,21 @@ TextDecoration::TextDecoration(
   int drawOrder,
   const QString &tooltip,
   bool fullWidth) :
-  QTextEdit::ExtraSelection {cursor},
-  m_drawOrder(drawOrder),
-  m_tooltip(tooltip) {
+  QTextEdit::ExtraSelection {QTextCursor(block), QTextCharFormat()},
+  m_tooltip(tooltip),
+  m_drawOrder(drawOrder) {
   init(range, fullWidth);
 }
 
 TextDecoration::TextDecoration(
-  const QTextDocument &document,
+  QTextDocument *document,
   const TextDecorationRange &range,
   int drawOrder,
   const QString &tooltip,
   bool fullWidth) :
-  QTextEdit::ExtraSelection {cursor},
-  m_drawOrder(drawOrder),
-  m_tooltip(tooltip) {
+  QTextEdit::ExtraSelection {QTextCursor(document), QTextCharFormat()},
+  m_tooltip(tooltip),
+  m_drawOrder(drawOrder) {
   init(range, fullWidth);
 }
 
@@ -71,7 +73,7 @@ bool TextDecoration::containsCursor(const QTextCursor &otherCursor) const {
   if (otherCursor.atBlockEnd()) {
     end -= 1;
   }
-  return start <= otherCursor.position() <= end;
+  return start <= otherCursor.position() && otherCursor.position() <= end;
 }
 
 void TextDecoration::setBold() {
@@ -97,10 +99,20 @@ void TextDecoration::setOutline(const QColor &color) {
   format.setProperty(QTextFormat::OutlinePen, QPen(color));
 }
 
+size_t computeIndent(const QString &text) {
+  size_t i;
+  for (i = 0; i < text.size(); i++) {
+    if (!text[0].isSpace()) {
+      break;
+    }
+  }
+  return i;
+}
+
 void TextDecoration::selectLine() {
   cursor.movePosition(QTextCursor::StartOfBlock);
   auto text = cursor.block().text();
-  auto lindent = text.size() - text.lstrip().size();
+  auto lindent = computeIndent(text);
   cursor.setPosition(cursor.block().position() + lindent);
   cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 }

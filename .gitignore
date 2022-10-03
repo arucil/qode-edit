@@ -33,3 +33,10 @@
 
 
 /.vscode/
+/cmake_install.cmake
+/Makefile
+/compile_commands.json
+*.zip
+/qodeedit_autogen/
+/CMakeCache.txt
+/CMakeFiles/

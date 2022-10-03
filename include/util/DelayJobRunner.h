@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QTimer>
-#include <functional>
 
 /**
   @brief Utility class for running job after a certain delay.
@@ -12,7 +11,8 @@
   executed while the IDE is not idle.
   A job is a simple callable.
  */
-class DelayJobRunner {
+class DelayJobRunner: public QObject {
+  Q_OBJECT
 public:
   /**
     @param delay Delay (ms) to wait before running the job. This delay applies
@@ -27,7 +27,7 @@ public:
     contructor elapsed if no other job is requested until then.
     @param job job.
    */
-  void requestJob(std::function<void ()> job);
+  void requestJob(std::function<void()> job);
 
   /** @brief Cancel pending request. */
   void cancel();
@@ -38,5 +38,5 @@ private slots:
 private:
   QTimer m_timer;
   int m_delay;
-  std::function<void ()> m_job;
+  std::function<void()> m_job;
 };

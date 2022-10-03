@@ -12,10 +12,12 @@
 #include <QString>
 #include <QTextBlock>
 #include <QVector>
-#include "utils.h"
+#include "util/DelayJobRunner.h"
 #include "manager/BackendManager.h"
 #include "manager/FileManager.h"
 #include "manager/ModeManager.h"
+#include "manager/PanelManager.h"
+#include "manager/TextDecorationManager.h"
 
 class QPaintEvent;
 class QKeyEvent;
@@ -74,6 +76,7 @@ enum class IndentChar {
   should define the mime types they support!**
  */
 class CodeEdit: public QPlainTextEdit {
+  Q_OBJECT
 public:
   /**
     @param parent Parent widget
@@ -212,6 +215,10 @@ signals:
   void unindentRequested();
 
 private:
+  friend class Panel;
+  friend class TextHelper;
+
+private:
   IndentChar m_indentChar;
   bool m_autoResetStyleSheet;
   bool m_closed;
@@ -233,7 +240,7 @@ private:
   PanelManager m_panels;
   TextDecorationManager m_decorations;
   QVector<CodeEdit *> m_clones;
-  QVector<char> m_wordSeparators;
+  QVector<QChar> m_wordSeparators;
   QColor m_selBackground;
   QColor m_selForeground;
   QColor m_foreground;

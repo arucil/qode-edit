@@ -43,7 +43,7 @@ void TextDecorationManager::updateEditorSelections() {
 
 void TextDecorationManager::clear() {
   for (auto i = m_decorationList.cbegin(); i != m_decorationList.cend(); i++) {
-    delete *i;
+    (*i)->deleteLater();
   }
   m_decorationList.clear();
   m_decorationSet.clear();

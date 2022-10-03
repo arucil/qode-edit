@@ -51,21 +51,21 @@ QTextCodec *Cache::getFileEncoding(
     auto encodings = preferredEncodings();
     if (preferredEncoding) {
       encodings.insert(0, preferredEncoding);
-      for (auto encoding : encodings) {
-        QFile f(path);
-        f.open(QIODevice::ReadOnly | QIODevice::Text);
-        if (!f.isOpen()) {
-          return {};
-        }
-        QTextStream stream(&f);
-        stream.setCodec(encoding);
-        stream.readAll();
-        if (stream.status() == QTextStream::ReadPastEnd) {
-          return encoding;
-        }
-      }
-      return nullptr;
     }
+    for (auto encoding : encodings) {
+      QFile f(path);
+      f.open(QIODevice::ReadOnly | QIODevice::Text);
+      if (!f.isOpen()) {
+        return {};
+      }
+      QTextStream stream(&f);
+      stream.setCodec(encoding);
+      stream.readAll();
+      if (stream.status() == QTextStream::ReadPastEnd) {
+        return encoding;
+      }
+    }
+    return nullptr;
   }
 }
 

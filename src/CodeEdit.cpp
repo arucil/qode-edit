@@ -12,11 +12,22 @@
 
 CodeEdit::CodeEdit(QWidget *parent, bool createStandardActions) :
   QPlainTextEdit(parent),
-  m_createStandardActions(createStandardActions),
+  m_indentChar(IndentChar::Space),
   m_autoResetStyleSheet(false),
   m_closed(false),
   m_showCtxMenu(true),
+  m_saveOnFocusOut(false),
+  m_showWhitespaces(false),
+  m_selectLineOnCopyEmpty(true),
+  m_dirty(false),
+  m_cleaning(false),
+  m_createStandardActions(createStandardActions),
+  m_useStylesheet(false),
   // m_backend(new BackendManager(this)),
+  m_tabSize(4),
+  m_zoomLevel(0),
+  m_fontSize(10),
+  m_prevTooltipBlockNbr(-1),
   m_file(this),
   m_modes(this),
   m_panels(this),
@@ -24,19 +35,8 @@ CodeEdit::CodeEdit(QWidget *parent, bool createStandardActions) :
   m_wordSeparators({'~', '!', '@', '#', '$', '%',  '^',  '&',  '*', '(', ')',
                     '+', '{', '}', '|', ':', '"',  '\'', '<',  '>', '?', ',',
                     '.', '/', ';', '[', ']', '\\', '\n', '\t', '=', '-', ' '}),
-  m_saveOnFocusOut(false),
-  m_indentChar(IndentChar::Space),
-  m_showWhitespaces(false),
-  m_tabSize(4),
-  m_zoomLevel(0),
-  m_fontSize(10),
-  m_selectLineOnCopyEmpty(true),
-  m_cleaning(false),
   m_tooltipRunner(700),
-  m_prevTooltipBlockNbr(-1),
-  m_dirty(false),
-  m_ctxMenu(nullptr),
-  m_useStylesheet(false) {
+  m_ctxMenu(nullptr) {
   installEventFilter(this);
   connect(
     document(),
@@ -53,7 +53,7 @@ CodeEdit::CodeEdit(QWidget *parent, bool createStandardActions) :
     this,
     &QWidget::customContextMenuRequested,
     this,
-    CodeEdit::showContextMenu);
+    &CodeEdit::showContextMenu);
 
   // init settings and styles from global settings/style modules
   initSettings();
@@ -94,12 +94,12 @@ void CodeEdit::setSaveOnFocusOut(bool save) {
   }
 }
 
-void CodeEdit::setShowWhiteSpaces(bool show) {
+void CodeEdit::setShowsWhiteSpaces(bool show) {
   if (m_showWhitespaces != show) {
     m_showWhitespaces = show;
     setWhitespaceFlags(show);
     for (auto c : m_clones) {
-      c->setShowWhiteSpaces(show);
+      c->setShowsWhiteSpaces(show);
     }
     rehighlight();
   }
@@ -213,7 +213,7 @@ void CodeEdit::initSettings() {
   m_showWhitespaces = false;
   m_tabSize = 4;
   m_indentChar = IndentChar::Space;
-  setTabStopWidth(m_tabSize * fontMetrics().width(" "));
+  setTabStopDistance(m_tabSize * fontMetrics().horizontalAdvance(" "));
   setWhitespaceFlags(m_showWhitespaces);
 }
 

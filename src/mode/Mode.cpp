@@ -1,4 +1,4 @@
-#include "Mode.h"
+#include "mode/Mode.h"
 
 Mode::Mode(const char *name) :
   m_name(name),

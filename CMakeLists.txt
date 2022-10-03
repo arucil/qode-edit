@@ -33,12 +33,15 @@ set(RESOURCES
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/resources)
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-
 add_library(qodeedit STATIC
     ${RESOURCES}
     ${SOURCES}
     ${HEADERS}
+)
+
+target_include_directories(qodeedit PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/3rdparty/variant
 )
 
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -53,7 +56,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     )
 endif()
 
-target_link_libraries(QodeEdit PRIVATE
+target_link_libraries(qodeedit PRIVATE
     ${QT_VERSION}::Core
     ${QT_VERSION}::Widgets
     ${QT_VERSION}::Gui
